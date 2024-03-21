@@ -92,9 +92,6 @@ public class Application {
         }
         concertList.forEach(eDAO::save);
 
-
-//        eDAO.findALlFootballMatches().forEach(System.out::println);
-
         emf.close();
         eM.close();
     }

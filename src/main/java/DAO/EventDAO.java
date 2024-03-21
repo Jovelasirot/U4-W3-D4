@@ -1,7 +1,9 @@
 package DAO;
 
+import entities.Concert;
 import entities.Event;
 import entities.FootBallMatch;
+import enums.Genre;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.persistence.EntityTransaction;
@@ -54,6 +56,38 @@ public class EventDAO {
 
     public List<FootBallMatch> findALlFootballMatches() {
         TypedQuery<FootBallMatch> query = em.createQuery("SELECT f FROM FootBallMatch f", FootBallMatch.class);
+        return query.getResultList();
+    }
+
+    public List<Concert> allConcert() {
+        TypedQuery<Concert> query = em.createQuery("SELECT c FROM Concert c", Concert.class);
+        return query.getResultList();
+    }
+
+    public List<Concert> getStreamingConcert(boolean isStreaming) {
+        TypedQuery<Concert> query = em.createQuery("SELECT c FROM Concert c WHERE c.onStreaming = :isStreaming", Concert.class);
+        query.setParameter("isStreaming", isStreaming);
+        return query.getResultList();
+    }
+
+    public List<Concert> getConcertByGenre(Genre genreInput) {
+        TypedQuery<Concert> query = em.createQuery("SELECT c FROM Concert c WHERE c.concertGenre = :g", Concert.class);
+        query.setParameter("g", genreInput);
+        return query.getResultList();
+    }
+
+    public List<FootBallMatch> getMatchesWonAtHome() {
+        TypedQuery<FootBallMatch> query = em.createQuery("SELECT f FROM FootBallMatch f WHERE f.winnerFootBallMatch = f.hostTeam", FootBallMatch.class);
+        return query.getResultList();
+    }
+
+    public List<FootBallMatch> getMatchesWonInTransfer() {
+        TypedQuery<FootBallMatch> query = em.createQuery("SELECT f FROM FootBallMatch f WHERE f.winnerFootBallMatch = f.guestTeam", FootBallMatch.class);
+        return query.getResultList();
+    }
+
+    public List<FootBallMatch> getMatchesDraw() {
+        TypedQuery<FootBallMatch> query = em.createQuery("SELECT f FROM FootBallMatch f WHERE f.winnerFootBallMatch IS null", FootBallMatch.class);
         return query.getResultList();
     }
 }

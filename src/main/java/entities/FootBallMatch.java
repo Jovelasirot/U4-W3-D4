@@ -1,24 +1,23 @@
 package entities;
 
 import enums.TypeEvent;
-import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 
 import java.time.LocalDate;
 
 @Entity
 public class FootBallMatch extends Event {
-    @Column(name = "host_team")
+
     private String hostTeam;
-    @Column(name = "guest_team")
+
     private String guestTeam;
 
-    @Column(name = "host_team_goals")
+
     private int hostTeamGoals;
-    @Column(name = "guest_team_goals")
+
     private int guestTeamGoals;
 
-    @Column(name = "winner_football_match")
+
     private String winnerFootBallMatch;
 
     public FootBallMatch() {

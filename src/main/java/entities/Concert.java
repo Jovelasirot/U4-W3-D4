@@ -2,7 +2,6 @@ package entities;
 
 import enums.Genre;
 import enums.TypeEvent;
-import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
@@ -11,11 +10,11 @@ import java.time.LocalDate;
 
 @Entity
 public class Concert extends Event {
-    @Column(name = "concert_genre")
+
     @Enumerated(EnumType.STRING)
     private Genre concertGenre;
-    
-    @Column(name = "on_streaming")
+
+
     private Boolean onStreaming;
 
     public Concert() {
