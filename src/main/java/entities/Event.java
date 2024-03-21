@@ -7,6 +7,8 @@ import java.time.LocalDate;
 import java.util.List;
 
 @Entity
+@Table(name = "Events")
+@Inheritance(strategy = InheritanceType.SINGLE_TABLE)
 public class Event {
 
     @Column(name = "event_date")

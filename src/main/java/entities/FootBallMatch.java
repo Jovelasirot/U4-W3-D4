@@ -1,17 +1,23 @@
 package entities;
 
 import enums.TypeEvent;
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 
 import java.time.LocalDate;
 
 @Entity
 public class FootBallMatch extends Event {
+    @Column(name = "host_team")
     private String hostTeam;
+    @Column(name = "guest_team")
     private String guestTeam;
 
-    private String winner;
+    @Column(name = "winner_football_match")
+    private String winnerFootBallMatch;
+    @Column(name = "host_team_goals")
     private int hostTeamGoals;
+    @Column(name = "guest_team_goals")
     private int guestTeamGoals;
 
     public FootBallMatch() {
@@ -21,7 +27,7 @@ public class FootBallMatch extends Event {
         super(title, eventDate, description, typeEvent, maxParticipant, location);
         this.hostTeam = hostTeam;
         this.guestTeam = guestTeam;
-        this.winner = winner;
+        this.winnerFootBallMatch = winner;
         this.hostTeamGoals = hostTeamGoals;
         this.guestTeamGoals = guestTeamGoals;
     }
@@ -43,11 +49,11 @@ public class FootBallMatch extends Event {
     }
 
     public String getWinner() {
-        return winner;
+        return winnerFootBallMatch;
     }
 
     public void setWinner(String winner) {
-        this.winner = winner;
+        this.winnerFootBallMatch = winner;
     }
 
     public int getHostTeamGoals() {
@@ -71,7 +77,7 @@ public class FootBallMatch extends Event {
         return "FootBallMatch{" +
                 "hostTeam='" + hostTeam + '\'' +
                 ", guestTeam='" + guestTeam + '\'' +
-                ", winner='" + winner + '\'' +
+                ", winner='" + winnerFootBallMatch + '\'' +
                 ", hostTeamGoals=" + hostTeamGoals +
                 ", guestTeamGoals=" + guestTeamGoals +
                 ", eventDate=" + eventDate +

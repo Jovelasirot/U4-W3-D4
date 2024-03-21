@@ -35,7 +35,7 @@ public class Application {
 //      People
         Supplier<Person> personSupplier = getPersonSupplier(aDAO.getAllAttendances());
         List<Person> peopleList = new ArrayList<>();
-        for (int i = 0; i < 20; i++) {
+        for (int i = 0; i < 200; i++) {
             peopleList.add(personSupplier.get());
         }
         peopleList.forEach(pDAO::save);
@@ -91,6 +91,8 @@ public class Application {
         }
         concertList.forEach(eDAO::save);
 
+
+//        eDAO.findALlFootballMatches().forEach(System.out::println);
 
         emf.close();
         eM.close();
@@ -189,13 +191,13 @@ public class Application {
             int hostTeamGoals = rdm.nextInt(1, 3);
             int guestTeamGoals = rdm.nextInt(1, 3);
 
-            String winner;
+            String winner = "";
             if (hostTeamGoals > guestTeamGoals) {
                 winner = hostTeam;
             } else if (guestTeamGoals > hostTeamGoals) {
                 winner = guestTeam;
             } else {
-                winner = null;
+                winner = "draw";
             }
 
             String title = faker.address().city() + " stadium - Football match";
@@ -219,7 +221,7 @@ public class Application {
         Random rdm = new Random();
         Faker faker = new Faker();
         TypeEvent[] typeEvents = TypeEvent.values();
-        List<Person> selectedAthletes = peopleList.subList(0, 10);
+
 
         return () -> {
             String title = faker.dragonBall().character() + " Track Meet";
@@ -235,9 +237,9 @@ public class Application {
 
             Location location = allLocations.get(rdm.nextInt(allLocations.size()));
 
-            Person winner = selectedAthletes.get(rdm.nextInt(selectedAthletes.size()));
+            Person winner = peopleList.get(rdm.nextInt(peopleList.size()));
 
-            return new TrackMeet(title, dateEvent, description, typeEvent, maxParticipant, location, selectedAthletes, winner);
+            return new TrackMeet(title, dateEvent, description, typeEvent, maxParticipant, location, peopleList, winner);
         };
     }
 

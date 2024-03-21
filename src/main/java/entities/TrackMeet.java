@@ -1,14 +1,18 @@
 package entities;
 
 import enums.TypeEvent;
-import jakarta.persistence.Entity;
+import jakarta.persistence.*;
 
 import java.time.LocalDate;
 import java.util.List;
 
 @Entity
+@DiscriminatorValue("TrackMeet")
 public class TrackMeet extends Event {
+    @ManyToMany
     private List<Person> athletes;
+    @OneToOne
+    @JoinColumn(name = "track_meet_winner")
     private Person winner;
 
     public TrackMeet() {

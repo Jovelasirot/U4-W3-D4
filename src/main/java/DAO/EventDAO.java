@@ -1,9 +1,11 @@
 package DAO;
 
 import entities.Event;
+import entities.FootBallMatch;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.persistence.EntityTransaction;
+import jakarta.persistence.TypedQuery;
 
 import java.util.List;
 
@@ -48,5 +50,10 @@ public class EventDAO {
         System.out.println("Event with id: " + eventFound.getId() + " was successfully deleted");
 
 
+    }
+
+    public List<FootBallMatch> findALlFootballMatches() {
+        TypedQuery<FootBallMatch> query = em.createQuery("SELECT f FROM FootBallMatch f", FootBallMatch.class);
+        return query.getResultList();
     }
 }
