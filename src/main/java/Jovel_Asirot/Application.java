@@ -263,8 +263,7 @@ public class Application {
 
             Location location = allLocations.get(rdm.nextInt(allLocations.size()));
 
-            int rdmConcertGenre = rdm.nextInt(concertGenres.length);
-            Genre concertGenre = concertGenres[rdmConcertGenre];
+            Genre concertGenre = concertGenres[rdm.nextInt(concertGenres.length)];
 
             Boolean onStreaming = faker.bool().bool();
 
