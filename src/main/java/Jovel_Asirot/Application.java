@@ -5,11 +5,9 @@ import DAO.EventDAO;
 import DAO.LocationDAO;
 import DAO.PersonDAO;
 import com.github.javafaker.Faker;
-import entities.Attendance;
-import entities.Event;
-import entities.Location;
-import entities.Person;
+import entities.*;
 import enums.Gender;
+import enums.Genre;
 import enums.SateAttendance;
 import enums.TypeEvent;
 import jakarta.persistence.EntityManager;
@@ -43,7 +41,7 @@ public class Application {
         peopleList.forEach(pDAO::save);
 
 //      Location
-       Supplier<Location> locationSupplier = getLocationSupplier();
+        Supplier<Location> locationSupplier = getLocationSupplier();
         List<Location> locationsList = new ArrayList<>();
         for (int i = 0; i < 20; i++) {
             locationsList.add(locationSupplier.get());
@@ -52,21 +50,14 @@ public class Application {
 
         List<Location> allLocations = lDAO.getAllLocations();
 
+
 //        Events
         Supplier<Event> eventSupplier = getEventSupplier(allLocations);
         List<Event> eventList = new ArrayList<>();
-        for (int i = 0; i < 30; i++) {
+        for (int i = 0; i < 10; i++) {
             eventList.add(eventSupplier.get());
         }
-
         eventList.forEach(eDAO::save);
-
-
-        for (Event event : eventList) {
-            int randomIndex = new Random().nextInt(allLocations.size());
-            Location randomLocation = allLocations.get(randomIndex);
-            event.setLocation(randomLocation);
-        }
 
 
 //        Attendance
@@ -75,6 +66,30 @@ public class Application {
             Attendance attendance = attendanceSupplier.get();
             aDAO.save(attendance);
         }
+
+//        Football matches
+        Supplier<FootBallMatch> footBallMatchSupplier = getFootBallMatchSupplier(allLocations);
+        List<FootBallMatch> footBallMatchesList = new ArrayList<>();
+        for (int i = 0; i < 20; i++) {
+            footBallMatchesList.add(footBallMatchSupplier.get());
+        }
+        footBallMatchesList.forEach(eDAO::save);
+
+//        Track Meet
+        Supplier<TrackMeet> trackMeetSupplier = getTrackMeetSupplier(locationsList, peopleList);
+        List<TrackMeet> trackMeetList = new ArrayList<>();
+        for (int i = 0; i < 10; i++) {
+            trackMeetList.add(trackMeetSupplier.get());
+        }
+        trackMeetList.forEach(eDAO::save);
+
+//        Concert
+        Supplier<Concert> concertSupplier = getConcertSupplier(allLocations);
+        List<Concert> concertList = new ArrayList<>();
+        for (int i = 0; i < 10; i++) {
+            concertList.add(concertSupplier.get());
+        }
+        concertList.forEach(eDAO::save);
 
 
         emf.close();
@@ -88,9 +103,10 @@ public class Application {
 
         return () -> {
             String title = faker.esports().event();
-            String description = faker.esports().game();
 
             LocalDate dateEvent = LocalDate.now().plusDays(rdm.nextInt(365));
+
+            String description = faker.esports().game();
 
             int rdmTypeEvent = rdm.nextInt(typeEvents.length);
             TypeEvent typeEvent = typeEvents[rdmTypeEvent];
@@ -107,6 +123,7 @@ public class Application {
         Random rdm = new Random();
         Faker faker = new Faker();
         Gender[] genders = Gender.values();
+
         return () -> {
 
             String namePerson = faker.name().firstName();
@@ -149,13 +166,110 @@ public class Application {
         };
     }
 
-    public static Supplier<Location> getLocationSupplier(){
+    public static Supplier<Location> getLocationSupplier() {
         Faker faker = new Faker();
-        return ()->{
+
+        return () -> {
             String city = faker.address().city();
             String cityName = faker.address().cityName();
 
-            return new Location(city,cityName);
+            return new Location(city, cityName);
         };
     }
+
+    public static Supplier<FootBallMatch> getFootBallMatchSupplier(List<Location> allLocations) {
+        Random rdm = new Random();
+        Faker faker = new Faker();
+        TypeEvent[] typeEvents = TypeEvent.values();
+
+        return () -> {
+            String hostTeam = faker.dragonBall().character() + "' team";
+            String guestTeam = faker.dragonBall().character() + "' team";
+
+            int hostTeamGoals = rdm.nextInt(1, 3);
+            int guestTeamGoals = rdm.nextInt(1, 3);
+
+            String winner;
+            if (hostTeamGoals > guestTeamGoals) {
+                winner = hostTeam;
+            } else if (guestTeamGoals > hostTeamGoals) {
+                winner = guestTeam;
+            } else {
+                winner = null;
+            }
+
+            String title = faker.address().city() + " stadium - Football match";
+
+            LocalDate dateEvent = LocalDate.now().plusDays(rdm.nextInt(365));
+
+            String description = "'" + hostTeam + "'" + " vs " + "'" + guestTeam + "'";
+
+            int rdmTypeEvent = rdm.nextInt(typeEvents.length);
+            TypeEvent typeEvent = typeEvents[rdmTypeEvent];
+
+            int maxParticipant = rdm.nextInt(10, 50);
+
+            Location location = allLocations.get(rdm.nextInt(allLocations.size()));
+
+            return new FootBallMatch(title, dateEvent, description, typeEvent, maxParticipant, location, hostTeam, winner, guestTeam, hostTeamGoals, guestTeamGoals);
+        };
+    }
+
+    public static Supplier<TrackMeet> getTrackMeetSupplier(List<Location> allLocations, List<Person> peopleList) {
+        Random rdm = new Random();
+        Faker faker = new Faker();
+        TypeEvent[] typeEvents = TypeEvent.values();
+        List<Person> selectedAthletes = peopleList.subList(0, 10);
+
+        return () -> {
+            String title = faker.dragonBall().character() + " Track Meet";
+
+            LocalDate dateEvent = LocalDate.now().plusDays(rdm.nextInt(365));
+
+            String description = title + " - The meet of the month";
+
+            int rdmTypeEvent = rdm.nextInt(typeEvents.length);
+            TypeEvent typeEvent = typeEvents[rdmTypeEvent];
+
+            int maxParticipant = rdm.nextInt(10, 50);
+
+            Location location = allLocations.get(rdm.nextInt(allLocations.size()));
+
+            Person winner = selectedAthletes.get(rdm.nextInt(selectedAthletes.size()));
+
+            return new TrackMeet(title, dateEvent, description, typeEvent, maxParticipant, location, selectedAthletes, winner);
+        };
+    }
+
+    public static Supplier<Concert> getConcertSupplier(List<Location> allLocations) {
+        Random rdm = new Random();
+        Faker faker = new Faker();
+        TypeEvent[] typeEvents = TypeEvent.values();
+        Genre[] concertGenres = Genre.values();
+
+        return () -> {
+            String title = faker.dragonBall().character() + " concert";
+
+            LocalDate dateEvent = LocalDate.now().plusDays(rdm.nextInt(365));
+
+            String description = title + " - The concert of the year";
+
+            int rdmTypeEvent = rdm.nextInt(typeEvents.length);
+            TypeEvent typeEvent = typeEvents[rdmTypeEvent];
+
+            int maxParticipant = rdm.nextInt(10, 50);
+
+            Location location = allLocations.get(rdm.nextInt(allLocations.size()));
+
+            int rdmConcertGenre = rdm.nextInt(concertGenres.length);
+            Genre concertGenre = concertGenres[rdmConcertGenre];
+
+            Boolean onStreaming = faker.bool().bool();
+
+            return new Concert(title, dateEvent, description, typeEvent, maxParticipant, location, concertGenre, onStreaming);
+        };
+
+    }
+
+
 }
