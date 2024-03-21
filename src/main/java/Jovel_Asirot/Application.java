@@ -75,6 +75,7 @@ public class Application {
         }
         footBallMatchesList.forEach(eDAO::save);
 
+
 //        Track Meet
         Supplier<TrackMeet> trackMeetSupplier = getTrackMeetSupplier(locationsList, peopleList);
         List<TrackMeet> trackMeetList = new ArrayList<>();
@@ -185,19 +186,19 @@ public class Application {
         TypeEvent[] typeEvents = TypeEvent.values();
 
         return () -> {
-            String hostTeam = faker.dragonBall().character() + "' team";
-            String guestTeam = faker.dragonBall().character() + "' team";
+            String hostTeam = faker.dragonBall().character() + " team";
+            String guestTeam = faker.dragonBall().character() + " team";
 
             int hostTeamGoals = rdm.nextInt(1, 3);
             int guestTeamGoals = rdm.nextInt(1, 3);
 
-            String winner = "";
+            String winner;
             if (hostTeamGoals > guestTeamGoals) {
                 winner = hostTeam;
             } else if (guestTeamGoals > hostTeamGoals) {
                 winner = guestTeam;
             } else {
-                winner = "draw";
+                winner = null;
             }
 
             String title = faker.address().city() + " stadium - Football match";
@@ -213,7 +214,7 @@ public class Application {
 
             Location location = allLocations.get(rdm.nextInt(allLocations.size()));
 
-            return new FootBallMatch(title, dateEvent, description, typeEvent, maxParticipant, location, hostTeam, winner, guestTeam, hostTeamGoals, guestTeamGoals);
+            return new FootBallMatch(title, dateEvent, description, typeEvent, maxParticipant, location, hostTeam, guestTeam, hostTeamGoals, guestTeamGoals, winner);
         };
     }
 

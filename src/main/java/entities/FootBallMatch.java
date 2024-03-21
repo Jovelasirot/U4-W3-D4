@@ -13,17 +13,18 @@ public class FootBallMatch extends Event {
     @Column(name = "guest_team")
     private String guestTeam;
 
-    @Column(name = "winner_football_match")
-    private String winnerFootBallMatch;
     @Column(name = "host_team_goals")
     private int hostTeamGoals;
     @Column(name = "guest_team_goals")
     private int guestTeamGoals;
 
+    @Column(name = "winner_football_match")
+    private String winnerFootBallMatch;
+
     public FootBallMatch() {
     }
 
-    public FootBallMatch(String title, LocalDate eventDate, String description, TypeEvent typeEvent, int maxParticipant, Location location, String hostTeam, String guestTeam, String winner, int hostTeamGoals, int guestTeamGoals) {
+    public FootBallMatch(String title, LocalDate eventDate, String description, TypeEvent typeEvent, int maxParticipant, Location location, String hostTeam, String guestTeam, int hostTeamGoals, int guestTeamGoals, String winner) {
         super(title, eventDate, description, typeEvent, maxParticipant, location);
         this.hostTeam = hostTeam;
         this.guestTeam = guestTeam;

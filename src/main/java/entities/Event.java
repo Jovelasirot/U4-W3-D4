@@ -8,7 +8,7 @@ import java.util.List;
 
 @Entity
 @Table(name = "Events")
-@Inheritance(strategy = InheritanceType.SINGLE_TABLE)
+@Inheritance(strategy = InheritanceType.JOINED)
 public class Event {
 
     @Column(name = "event_date")
